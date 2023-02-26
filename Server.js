@@ -1,16 +1,13 @@
 //NodeJS: localhost:3080
 
+
+
 const express = require('express');
 const app = express();
 const cors = require('cors');
 
 
-app.use(express.json());
-
-app.use(cors({
-    origin: 'http://localhost:3080/exemple',
-    methods: ['GET','POST','DELETE','UPDATE','PUT','PATCH']
-}));
+app.use(express.json(), cors());
 
 
 
@@ -33,22 +30,28 @@ admin.initializeApp({
 
 const db = getFirestore();
 
+app.post('/registre', cors(), (req, res)=>{
+
+    const user={'Usuari': req.body.user,
+                'email': req.body.email,
+                'contrasenya': req.body.password};
+    db.collection('usuaris').add(user);
+    console.log(user);
+})
 
 
-app.get('/exemplee', cors(), async (req, res)=>{
-    const cityRef = db.collection('usuaris').doc('5elh69EI0AiKX1Jy5KIq');
-    const doc = await cityRef.get();
-    if (!doc.exists) {
-        console.log('No such document!');
-    } else {
-        console.log('Document data:', doc.data());
+
+app.get('/registre', cors(), async(req,res)=> {
+
+    const citiesRef = db.collection('usuaris');
+    const snapshot = await citiesRef.where('contrasenya:', '==', true).get();
+    if (snapshot.empty) {
+        console.log('No matching documents.');
+        return;
     }
-    res.json(doc.data());
-});
 
-app.post('/exemplee', cors(),async (req)=>{
-    const noms={PROVA: req.body.user};
-    const res = await db.collection('usuaris').doc('5elh69EI0AiKX1Jy5KIq').set(noms);
-    console.log(noms)
-});
-
+    snapshot.forEach(doc => {
+        console.log(doc.id, '=>', doc.data());
+    });index.js
+    res.json(doc);
+})
