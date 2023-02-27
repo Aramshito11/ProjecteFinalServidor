@@ -31,8 +31,8 @@ const db = getFirestore();
 app.post('/registre', cors(), (req, res)=>{
 
     const user={'Usuari': req.body.user,
-        'email': req.body.email,
-        'contrasenya': req.body.password};
+                'email': req.body.email,
+                'contrasenya': req.body.password};
     db.collection('usuaris').add(user);
     console.log(user);
 })
@@ -41,6 +41,23 @@ app.post('/registre', cors(), (req, res)=>{
 
 
 
+
+// app.post('/api/correo', async (req, res) =>{
+//     // console.log("Cuerpo: "+JSON.stringify(req.body.params))
+//     let email =req.body;
+//     console.log("Correo: "+req.body.email)
+//     comprovar(email);
+// });
+//
+// async function comprovar(email){
+//     const docs = db.collection('usuaris')
+//     const snapshot = await docs.where('email', '==', email).get()
+//     snapshot.forEach(doc =>{
+//         console.log(doc.id, '=>', doc.data())
+//         return true;
+//     })
+//     console.log("Correo def: "+JSON.stringify(email))
+// }
 
 app.get('/api/check', async (req,res)=>{
     let correu = {email: req.query.email}
@@ -125,3 +142,17 @@ app.post('/api/sendemail/', function (req, res) {
     const {name, email} = req.body;
     sendEmail(name, email);
 });
+
+app.post('/api/contrasenya', async (req,res)=>{
+    const {email, contra}=req.body
+    var documento=""
+    const docs = db.collection('usuaris')
+    const snapshot = await docs.where('email', '==', email).get();
+    snapshot.forEach(doc =>{
+        console.log("Doc ID: "+doc.id)
+        documento=doc.id;
+    })
+
+    const moddify = await db.collection('usuaris').doc(documento).set({contrasenya: contra}, {merge:true})
+    res.json(contra)
+})
