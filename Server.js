@@ -4,17 +4,12 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 
-
 app.use(express.json(), cors());
-
-
 
 port = 4080;
 app.listen(port, () => {
     console.log(`Port::${port}`);
 });
-
-
 
 var admin = require("firebase-admin");
 
@@ -31,33 +26,11 @@ const db = getFirestore();
 app.post('/registre', cors(), (req, res)=>{
 
     const user={'Usuari': req.body.user,
-                'email': req.body.email,
-                'contrasenya': req.body.password};
+        'email': req.body.email,
+        'contrasenya': req.body.password};
     db.collection('usuaris').add(user);
     console.log(user);
 })
-
-
-
-
-
-
-// app.post('/api/correo', async (req, res) =>{
-//     // console.log("Cuerpo: "+JSON.stringify(req.body.params))
-//     let email =req.body;
-//     console.log("Correo: "+req.body.email)
-//     comprovar(email);
-// });
-//
-// async function comprovar(email){
-//     const docs = db.collection('usuaris')
-//     const snapshot = await docs.where('email', '==', email).get()
-//     snapshot.forEach(doc =>{
-//         console.log(doc.id, '=>', doc.data())
-//         return true;
-//     })
-//     console.log("Correo def: "+JSON.stringify(email))
-// }
 
 app.get('/api/check', async (req,res)=>{
     let correu = {email: req.query.email}
@@ -70,8 +43,6 @@ app.get('/api/check', async (req,res)=>{
     })
     res.json(resultat)
 });
-
-
 
 app.get('/inicisessio', async (req,res)=>{
     let correu = {email: req.query.email}
@@ -96,9 +67,6 @@ app.get('/contrasenya', async (req,res)=>{
     })
     res.json(resultat)
 });
-
-
-
 
 const axios = require('axios');
 
