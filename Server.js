@@ -3,15 +3,18 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
-app.use(cors());
 
-app.use(express.json());
+
+app.use(express.json(), cors());
+
 
 
 port = 4080;
 app.listen(port, () => {
     console.log(`Port::${port}`);
 });
+
+
 
 var admin = require("firebase-admin");
 
@@ -25,24 +28,17 @@ admin.initializeApp({
 
 const db = getFirestore();
 
+app.post('/registre', cors(), (req, res)=>{
+
+    const user={'Usuari': req.body.user,
+                'email': req.body.email,
+                'contrasenya': req.body.password};
+    db.collection('usuaris').add(user);
+    console.log(user);
+})
 
 
-app.get('/exemplee', cors(), async (req, res)=>{
-    const cityRef = db.collection('usuaris').doc('5elh69EI0AiKX1Jy5KIq');
-    const doc = await cityRef.get();
-    if (!doc.exists) {
-        console.log('No such document!');
-    } else {
-        console.log('Document data:', doc.data());
-    }
-    res.json(doc.data());
-});
 
-app.post('/exemplee', cors(),async (req)=>{
-    const noms={PROVA: req.body.user};
-    const res = await db.collection('usuaris').doc('5elh69EI0AiKX1Jy5KIq').set(noms);
-    console.log(noms)
-});
 
 
 
