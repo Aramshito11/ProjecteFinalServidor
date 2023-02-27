@@ -31,8 +31,8 @@ const db = getFirestore();
 app.post('/registre', cors(), (req, res)=>{
 
     const user={'Usuari': req.body.user,
-                'email': req.body.email,
-                'contrasenya': req.body.password};
+        'email': req.body.email,
+        'contrasenya': req.body.password};
     db.collection('usuaris').add(user);
     console.log(user);
 })
@@ -41,23 +41,6 @@ app.post('/registre', cors(), (req, res)=>{
 
 
 
-
-// app.post('/api/correo', async (req, res) =>{
-//     // console.log("Cuerpo: "+JSON.stringify(req.body.params))
-//     let email =req.body;
-//     console.log("Correo: "+req.body.email)
-//     comprovar(email);
-// });
-//
-// async function comprovar(email){
-//     const docs = db.collection('usuaris')
-//     const snapshot = await docs.where('email', '==', email).get()
-//     snapshot.forEach(doc =>{
-//         console.log(doc.id, '=>', doc.data())
-//         return true;
-//     })
-//     console.log("Correo def: "+JSON.stringify(email))
-// }
 
 app.get('/api/check', async (req,res)=>{
     let correu = {email: req.query.email}
@@ -70,6 +53,33 @@ app.get('/api/check', async (req,res)=>{
     })
     res.json(resultat)
 });
+
+
+
+app.get('/inicisessio', async (req,res)=>{
+    let correu = {email: req.query.email}
+    let resultat = false;
+    const docs = db.collection('usuaris')
+    const snapshot = await docs.where('email', '==', correu.email).get()
+    snapshot.forEach(doc =>{
+        console.log(doc.id, '=>', doc.data())
+        resultat = true
+    })
+    res.json(resultat)
+});
+
+app.get('/contrasenya', async (req,res)=>{
+    let correu = {name: req.query.name}
+    let resultat = false;
+    const docs = db.collection('usuaris')
+    const snapshot = await docs.where('contrasenya', '==', correu.name).get()
+    snapshot.forEach(doc =>{
+        console.log(doc.id, '=>', doc.data())
+        resultat = true
+    })
+    res.json(resultat)
+});
+
 
 
 
