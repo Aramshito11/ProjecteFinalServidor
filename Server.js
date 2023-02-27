@@ -38,7 +38,6 @@ app.get('/api/check', async (req,res)=>{
     const docs = db.collection('usuaris')
     const snapshot = await docs.where('email', '==', correu.email).get()
     snapshot.forEach(doc =>{
-        console.log(doc.id, '=>', doc.data())
         resultat = true
     })
     res.json(resultat)
@@ -50,7 +49,6 @@ app.get('/inicisessio', async (req,res)=>{
     const docs = db.collection('usuaris')
     const snapshot = await docs.where('email', '==', correu.email).get()
     snapshot.forEach(doc =>{
-        console.log(doc.id, '=>', doc.data())
         resultat = true
     })
     res.json(resultat)
@@ -62,7 +60,6 @@ app.get('/contrasenya', async (req,res)=>{
     const docs = db.collection('usuaris')
     const snapshot = await docs.where('contrasenya', '==', correu.name).get()
     snapshot.forEach(doc =>{
-        console.log(doc.id, '=>', doc.data())
         resultat = true
     })
     res.json(resultat)
@@ -79,9 +76,9 @@ async function sendEmail(name, email) {
             "TextPart": "Hola buenas, \n"+
                 "Hemos recibido una solicitud de cambio de contraseña, en caso de ser tu quien ha solicitado esto, entra en el link que tienes a continuación. En caso contrario alguien esta intentando acceder a tu cuenta. \n" +
                 "" +
-                "http://localhost:4200/canvi \n" +
+                "http://localhost:4200/canvi \n\n" +
                 "" +
-                "Attentamente:  \n" +
+                "Attentamente:  \n\n" +
                 "" +
                 "Amazon."
         }]
@@ -117,10 +114,19 @@ app.post('/api/contrasenya', async (req,res)=>{
     const docs = db.collection('usuaris')
     const snapshot = await docs.where('email', '==', email).get();
     snapshot.forEach(doc =>{
-        console.log("Doc ID: "+doc.id)
         documento=doc.id;
     })
-
     const moddify = await db.collection('usuaris').doc(documento).set({contrasenya: contra}, {merge:true})
     res.json(contra)
 })
+
+app.get('/api/nombre', async (req,res)=>{
+    const email=req.query.email
+    var documento=""
+    const docs = db.collection('usuaris')
+    const snapshot = await docs.where('email', '==', email).get();
+    snapshot.forEach(doc =>{
+        documento=doc.data();
+    })
+    res.json(documento)
+});
