@@ -70,7 +70,7 @@ const axios = require('axios');
 async function sendEmail(name, email) {
     const data = JSON.stringify({
         "Messages": [{
-            "From": {"Email": "aram.mateos@institutvidreres.cat", "Name": "Aram"},
+            "From": {"Email": "daniel.gelabert@institutvidreres.cat", "Name": "Dani"},
             "To": [{"Email": email, "Name": name}],
             "Subject": "Cambiar tu contraseña",
             "TextPart": "Hola buenas, \n"+
@@ -89,7 +89,7 @@ async function sendEmail(name, email) {
         url: 'https://api.mailjet.com/v3.1/send',
         data: data,
         headers: {'Content-Type': 'application/json'},
-        auth: {username: 'facf0ff81050642cbb782be394c4cd12', password: '354e4d6f8c62a81229b065c733d4ab1c'},
+        auth: {username: 'd150a24fda9b232d888c504e789d068f', password: '509e73dde62817d0a7aad8a30a182227'},
     };
 
     return axios(config)
